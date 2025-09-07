@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>베넷 집품 인원 효율 계산기 - Ver 1.0 (실시간 협업)</title>
+    <title>베넷 집품 인원 효율 계산기 - Ver 1.0 (실시간 연동)</title>
     
     <link rel="icon" href="https://raw.githubusercontent.com/qogmlwo000/gwj2pickpackhtp/main/Bennett.ico" type="image/x-icon">
 
@@ -60,7 +60,8 @@
         <div class="bg-gray-700 p-3 rounded-lg text-sm text-gray-300 space-y-2">
             <p class="font-bold text-lg text-green-400">⚡ 실시간 협업 모드</p>
             <p>이 페이지에 접속한 모든 사용자와 데이터가 실시간으로 동기화됩니다.</p>
-            <p class="mt-2 text-xs text-gray-400">다른 사람이 입력하는 필드는 잠시 후 자동으로 업데이트 됩니다.</p>
+            <p class="mt-2 font-semibold text-amber-400">⭐ 우선순위 기능 추가</p>
+            <p>각 층의 작업 우선순위를 설정하면, '긴급'한 층에 먼저 인원을 지원하도록 제안합니다.</p>
         </div>
     </aside>
     
@@ -70,12 +71,8 @@
         <div class="w-full bg-gray-800 shadow-lg p-4 flex-shrink-0">
             <div class="flex justify-between items-center">
                 <div class="flex items-center">
-                    <button id="sidebar-toggle-desktop" class="p-2 rounded-md hover:bg-gray-700 mr-4">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-                    </button>
-                    <button id="sidebar-toggle-mobile" class="p-2 rounded-md hover:bg-gray-700 mr-4">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-                    </button>
+                    <button id="sidebar-toggle-desktop" class="p-2 rounded-md hover:bg-gray-700 mr-4"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg></button>
+                    <button id="sidebar-toggle-mobile" class="p-2 rounded-md hover:bg-gray-700 mr-4"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg></button>
                     <div>
                         <h1 id="main-title" class="text-2xl font-extrabold">🚀 베넷 집품 인원 효율 계산기 - Ver 1.0</h1>
                         <p class="text-gray-400 text-sm">모든 변경사항은 실시간으로 자동 동기화됩니다.</p>
@@ -91,21 +88,15 @@
                     <div class="relative">
                         <label class="block mb-2 text-sm font-medium text-gray-300">마감까지 남은 시간</label>
                         <div class="flex items-center space-x-2">
-                            <input type="number" id="deadline-hours" class="calc-input w-full bg-gray-700 border-gray-600 rounded-md p-2 text-base focus:ring-blue-500 focus:border-blue-500" placeholder="0">
+                            <input type="number" id="deadline-hours" class="calc-input w-full bg-gray-700 border-gray-600 rounded-md p-2 text-base" placeholder="0">
                             <span class="font-semibold text-gray-400">시간</span>
-                            <input type="number" id="deadline-minutes" class="calc-input w-full bg-gray-700 border-gray-600 rounded-md p-2 text-base focus:ring-blue-500 focus:border-blue-500" placeholder="0">
+                            <input type="number" id="deadline-minutes" class="calc-input w-full bg-gray-700 border-gray-600 rounded-md p-2 text-base" placeholder="0">
                             <span class="font-semibold text-gray-400">분</span>
                         </div>
                     </div>
                     <div class="border-t border-gray-700 pt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <button id="share-btn" class="w-full cursor-pointer py-2 px-4 rounded-lg text-sm font-semibold bg-teal-600 text-white hover:bg-teal-700 flex items-center justify-center space-x-2 transition-colors">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z" /></svg>
-                            <span>결과 캡처/공유</span>
-                        </button>
-                        <button id="reset-btn" class="w-full cursor-pointer py-2 px-4 rounded-lg text-sm font-semibold bg-red-600 text-white hover:bg-red-700 flex items-center justify-center space-x-2 transition-colors">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" /></svg>
-                            <span>전체 초기화</span>
-                        </button>
+                        <button id="share-btn" class="w-full cursor-pointer py-2 px-4 rounded-lg text-sm font-semibold bg-teal-600 text-white hover:bg-teal-700 flex items-center justify-center space-x-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z" /></svg><span>결과 캡처/공유</span></button>
+                        <button id="reset-btn" class="w-full cursor-pointer py-2 px-4 rounded-lg text-sm font-semibold bg-red-600 text-white hover:bg-red-700 flex items-center justify-center space-x-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" /></svg><span>전체 초기화</span></button>
                     </div>
                 </div>
             </div>
@@ -114,15 +105,20 @@
                 <div class="calculator-card bg-gray-800 rounded-lg flex flex-col overflow-hidden border-t-4 border-yellow-400">
                     <div class="p-5 space-y-4">
                         <h2 class="text-xl font-bold text-yellow-400">🏢 6층 (6.1 + 6.3)</h2>
+                        <div class="relative">
+                            <label class="text-sm font-medium text-gray-400">⭐ 작업 우선순위</label>
+                            <select id="priority-6f" class="calc-input w-full bg-gray-700 rounded p-2 mt-1 appearance-none">
+                                <option value="긴급">🚨긴급</option>
+                                <option value="보통" selected>보통</option>
+                                <option value="여유">👍여유</option>
+                            </select>
+                        </div>
                         <div class="space-y-3">
                             <div class="relative"><label class="text-sm font-medium text-gray-400">현재 인원 (명)</label><input type="number" id="staff-6f" class="calc-input w-full bg-gray-700 rounded p-2 mt-1" placeholder="0"></div>
                             <div class="relative"><label class="text-sm font-medium text-gray-400">집품 백로그 (유닛 수)</label><input type="number" id="backlog-6f" class="calc-input w-full bg-gray-700 rounded p-2 mt-1" placeholder="0"></div>
                         </div>
                         <div class="bg-gray-700/60 p-3 rounded-md space-y-2">
-                            <div class="flex justify-between items-center">
-                                <label class="text-sm font-semibold text-cyan-400">진행 상황</label>
-                                <button id="apply-progress-6f" class="apply-progress-btn text-xs bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-1 px-2 rounded">🔄 반영</button>
-                            </div>
+                            <div class="flex justify-between items-center"><label class="text-sm font-semibold text-cyan-400">진행 상황</label><button id="apply-progress-6f" class="apply-progress-btn text-xs bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-1 px-2 rounded">🔄 반영</button></div>
                             <div class="flex items-center space-x-2">
                                 <div class="w-full relative"><input type="number" id="progress-minutes-6f" class="calc-input w-full bg-gray-600 p-1.5 rounded" placeholder="0"><span class="text-sm text-gray-400 absolute right-2 top-1/2 -translate-y-1/2">분</span></div>
                                 <div class="w-full relative"><input type="number" id="progress-units-6f" class="calc-input w-full bg-gray-600 p-1.5 rounded" placeholder="0"><span class="text-sm text-gray-400 absolute right-2 top-1/2 -translate-y-1/2">개</span></div>
@@ -136,10 +132,10 @@
                         <p class="flex justify-between"><span>🧑‍🤝‍🧑 필요/잉여 인원:</span> <span id="result-staff-diff-6f" class="font-bold text-lg text-white">-.--</span></p>
                     </div>
                 </div>
-
                 <div class="calculator-card bg-gray-800 rounded-lg flex flex-col overflow-hidden border-t-4 border-green-400">
                      <div class="p-5 space-y-4">
                         <h2 class="text-xl font-bold text-green-400">🏢 7.2층</h2>
+                        <div class="relative"><label class="text-sm font-medium text-gray-400">⭐ 작업 우선순위</label><select id="priority-72f" class="calc-input w-full bg-gray-700 rounded p-2 mt-1 appearance-none"><option value="긴급">🚨긴급</option><option value="보통" selected>보통</option><option value="여유">👍여유</option></select></div>
                         <div class="space-y-3">
                             <div class="relative"><label class="text-sm font-medium text-gray-400">현재 인원 (명)</label><input type="number" id="staff-72f" class="calc-input w-full bg-gray-700 rounded p-2 mt-1" placeholder="0"></div>
                             <div class="relative"><label class="text-sm font-medium text-gray-400">집품 백로그 (유닛 수)</label><input type="number" id="backlog-72f" class="calc-input w-full bg-gray-700 rounded p-2 mt-1" placeholder="0"></div>
@@ -159,10 +155,10 @@
                         <p class="flex justify-between"><span>🧑‍🤝‍🧑 필요/잉여 인원:</span> <span id="result-staff-diff-72f" class="font-bold text-lg text-white">-.--</span></p>
                     </div>
                 </div>
-
                 <div class="calculator-card bg-gray-800 rounded-lg flex flex-col overflow-hidden border-t-4 border-blue-400">
                     <div class="p-5 space-y-4">
                         <h2 class="text-xl font-bold text-blue-400">🏢 7.3층</h2>
+                        <div class="relative"><label class="text-sm font-medium text-gray-400">⭐ 작업 우선순위</label><select id="priority-73f" class="calc-input w-full bg-gray-700 rounded p-2 mt-1 appearance-none"><option value="긴급">🚨긴급</option><option value="보통" selected>보통</option><option value="여유">👍여유</option></select></div>
                         <div class="space-y-3">
                             <div class="relative"><label class="text-sm font-medium text-gray-400">현재 인원 (명)</label><input type="number" id="staff-73f" class="calc-input w-full bg-gray-700 rounded p-2 mt-1" placeholder="0"></div>
                             <div class="relative"><label class="text-sm font-medium text-gray-400">집품 백로그 (유닛 수)</label><input type="number" id="backlog-73f" class="calc-input w-full bg-gray-700 rounded p-2 mt-1" placeholder="0"></div>
@@ -182,7 +178,6 @@
                         <p class="flex justify-between"><span>🧑‍🤝‍🧑 필요/잉여 인원:</span> <span id="result-staff-diff-73f" class="font-bold text-lg text-white">-.--</span></p>
                     </div>
                 </div>
-
                 <div class="bg-gray-900 border-2 border-dashed border-teal-500 rounded-lg p-5 flex flex-col">
                     <h2 class="text-xl font-bold text-teal-400 mb-4">📊 전체 현황 요약</h2>
                     <div class="space-y-3">
@@ -259,7 +254,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     function handleInputChange(event) {
         const path = event.target.id.replace(/-/g, '/');
-        const value = parseFloat(event.target.value) || 0;
+        const value = event.target.type === 'number' ? (parseFloat(event.target.value) || 0) : event.target.value;
         db.ref(path).set(value);
         db.ref(`typing/${path}`).set(null);
     }
@@ -268,11 +263,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isUpdatingFromFirebase) return;
         const path = event.target.id.replace(/-/g, '/');
         db.ref(`typing/${path}`).set(true);
-        
         clearTimeout(localTypingTimeout);
-        localTypingTimeout = setTimeout(() => {
-            db.ref(`typing/${path}`).set(null);
-        }, 800);
+        localTypingTimeout = setTimeout(() => db.ref(`typing/${path}`).set(null), 800);
     }
 
     function updateUIFromFirebase(data) {
@@ -280,14 +272,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const path = input.id.replace(/-/g, '/');
             const value = getObjectValueByPath(data, path);
             if (value !== undefined && document.activeElement !== input) {
-                 input.value = value || '';
+                 input.value = value || (input.type === 'number' ? '' : '보통');
             }
         });
     }
     
     function updateTypingIndicators(typingData) {
         document.querySelectorAll('.is-typing-indicator').forEach(ind => ind.remove());
-        
         for (const path in typingData) {
             if (typingData[path]) {
                 const id = path.replace(/\//g, '-');
@@ -306,15 +297,13 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!isFinite(hours) || hours <= 0) return "-.--";
         const h = Math.floor(hours);
         const m = Math.round((hours - h) * 60);
-        let result = '';
-        if (h > 0) result += `${h}시간 `;
-        if (m > 0) result += `${m}분`;
-        return result.trim() || "0분";
+        return `${h > 0 ? h + '시간 ' : ''}${m > 0 ? m + '분' : ''}`.trim() || "0분";
     }
 
     function generateRecommendation() {
         let surplusFloors = [];
         let deficitFloors = [];
+        const priorityOrder = { '긴급': 1, '보통': 2, '여유': 3 };
 
         floors.forEach(floor => {
             const stat = floorStats[floor.id];
@@ -326,10 +315,14 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         surplusFloors.sort((a, b) => b.surplus - a.surplus);
-        deficitFloors.sort((a, b) => b.deficit - a.deficit);
+        deficitFloors.sort((a, b) => {
+            const priorityA = priorityOrder[a.priority] || 2;
+            const priorityB = priorityOrder[b.priority] || 2;
+            if (priorityA !== priorityB) return priorityA - priorityB;
+            return b.deficit - a.deficit;
+        });
 
         ui.recommendationArea.innerHTML = '';
-
         if (deficitFloors.length === 0) {
             ui.recommendationArea.innerHTML = '<p class="text-center text-green-400">✅ 현재 인원 배치가 안정적입니다.</p>';
             return;
@@ -340,31 +333,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         let recommendations = [];
-        
         for (let needy of deficitFloors) {
             if (needy.deficit <= 0) continue;
             let needed = needy.deficit;
-
             for (let donor of surplusFloors) {
                 if (donor.surplus <= 0 || needed <= 0) continue;
-                
                 const moveCount = Math.min(needed, donor.surplus);
-
-                const needyAfterStaff = needy.staff + moveCount;
-                const donorAfterStaff = donor.staff - moveCount;
-                const needyNewTime = (needy.backlog / (needyAfterStaff * needy.uph));
-                const donorNewTime = (donorAfterStaff > 0) ? (donor.backlog / (donorAfterStaff * donor.uph)) : Infinity;
-                
-                recommendations.push({
-                    donorName: donor.name,
-                    needyName: needy.name,
-                    moveCount: moveCount,
-                    needyOriginalTime: needy.completionTime,
-                    needyNewTime: needyNewTime,
-                    donorOriginalTime: donor.completionTime,
-                    donorNewTime: donorNewTime
-                });
-
+                const needyNewTime = (needy.backlog / ((needy.staff + moveCount) * needy.uph));
+                const donorNewTime = (donor.staff - moveCount > 0) ? (donor.backlog / ((donor.staff - moveCount) * donor.uph)) : Infinity;
+                recommendations.push({ donorName: donor.name, needyName: needy.name, moveCount, needyOriginalTime: needy.completionTime, needyNewTime, donorOriginalTime: donor.completionTime, donorNewTime });
                 needed -= moveCount;
                 donor.surplus -= moveCount;
             }
@@ -399,7 +376,17 @@ document.addEventListener('DOMContentLoaded', () => {
             const floorId = floor.id;
             const staff = parseFloat(document.getElementById(`staff-${floorId}`).value) || 0;
             const backlog = parseFloat(document.getElementById(`backlog-${floorId}`).value) || 0;
-            const uph = parseFloat(document.getElementById(`uph-${floorId}`).value) || 0;
+            const uphInput = document.getElementById(`uph-${floorId}`);
+            const progressMinutes = parseFloat(document.getElementById(`progress-minutes-${floorId}`).value) || 0;
+            const progressUnits = parseFloat(document.getElementById(`progress-units-${floorId}`).value) || 0;
+            const priority = document.getElementById(`priority-${floorId}`).value || '보통';
+
+            if (progressMinutes > 0 && progressUnits > 0 && staff > 0) {
+                const calculatedUPH = (progressUnits / staff) / (progressMinutes / 60);
+                if (document.activeElement !== uphInput) { uphInput.value = calculatedUPH.toFixed(1); }
+            }
+            
+            const uph = parseFloat(uphInput.value) || 0;
             const floorThroughput = staff * uph;
             const completionTime = (floorThroughput > 0) ? (backlog / floorThroughput) : 0;
             const completionTimeEl = document.getElementById(`result-completion-time-${floorId}`);
@@ -416,15 +403,14 @@ document.addEventListener('DOMContentLoaded', () => {
             if (deadline > 0 && backlog > 0) {
                 const requiredStaff = (uph > 0) ? Math.ceil((backlog / deadline) / uph) : 0;
                 staffDiff = staff - requiredStaff;
-                const staffDiffEl = document.getElementById(`result-staff-diff-${floorId}`);
-                staffDiffEl.innerHTML = staffDiff >= 0 ? `<span class="text-green-400">+${staffDiff}명 (잉여)</span>` : `<span class="text-red-400">${staffDiff}명 (부족)</span>`;
+                document.getElementById(`result-staff-diff-${floorId}`).innerHTML = staffDiff >= 0 ? `<span class="text-green-400">+${staffDiff}명 (잉여)</span>` : `<span class="text-red-400">${staffDiff}명 (부족)</span>`;
             } else {
                  document.getElementById(`result-staff-diff-${floorId}`).textContent = "-.--";
             }
             
             document.getElementById(`result-required-uph-${floorId}`).textContent = (deadline > 0 && staff > 0) ? `${(backlog / (staff * deadline)).toFixed(1)} UPH` : "-.--";
             
-            floorStats[floorId] = { staff, backlog, uph, staffDiff, completionTime };
+            floorStats[floorId] = { staff, backlog, uph, staffDiff, completionTime, priority };
 
             total.staff += staff;
             total.backlog += backlog;
@@ -448,8 +434,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const avgUPH = (total.staff > 0) ? (total.throughput / total.staff) : 0;
             const totalRequiredStaff = (avgUPH > 0) ? Math.ceil((total.backlog / deadline) / avgUPH) : 0;
             const totalStaffDiff = total.staff - totalRequiredStaff;
-            const totalStaffDiffEl = document.getElementById('total-staff-diff');
-            totalStaffDiffEl.innerHTML = totalStaffDiff >= 0 ? `<span class="text-green-400">+${totalStaffDiff}명 (잉여)</span>` : `<span class="text-red-400">${totalStaffDiff}명 (부족)</span>`;
+            document.getElementById('total-staff-diff').innerHTML = totalStaffDiff >= 0 ? `<span class="text-green-400">+${totalStaffDiff}명 (잉여)</span>` : `<span class="text-red-400">${totalStaffDiff}명 (부족)</span>`;
         } else {
             document.getElementById('total-staff-diff').textContent = "-.--";
         }
@@ -465,17 +450,11 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.apply-progress-btn').forEach(button => {
         button.addEventListener('click', () => {
             const floorId = button.id.replace('apply-progress-', '');
-            const paths = {
-                backlog: `backlog/${floorId}`,
-                progressUnits: `progress-units/${floorId}`,
-                progressMinutes: `progress-minutes/${floorId}`
-            };
-
+            const paths = { backlog: `backlog/${floorId}`, progressUnits: `progress-units/${floorId}`, progressMinutes: `progress-minutes/${floorId}` };
             db.ref().once('value', (snapshot) => {
                 const data = snapshot.val();
                 const currentBacklog = getObjectValueByPath(data, paths.backlog) || 0;
                 const processedUnits = getObjectValueByPath(data, paths.progressUnits) || 0;
-                
                 if (processedUnits > 0) {
                     let updates = {};
                     updates[paths.backlog] = Math.max(0, currentBacklog - processedUnits);
