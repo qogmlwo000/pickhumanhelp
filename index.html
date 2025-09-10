@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>집품 인원 효율 계산기 - Ver 1.0 (실시간 연동)</title>
+    <title>집품 인원 효율 계산기 - Ver 1.0</title>
     
     <link rel="icon" href="https://raw.githubusercontent.com/qogmlwo000/gwj2pickpackhtp/main/Bennett.ico" type="image/x-icon">
 
@@ -60,9 +60,9 @@
         <div class="bg-gray-700 p-3 rounded-lg text-sm text-gray-300 space-y-2">
             <p class="font-bold text-lg text-green-400">⚡ 실시간 협업 모드</p>
             <p>이 페이지에 접속한 모든 사용자와 데이터가 실시간으로 동기화됩니다.</p>
-            <p class="mt-2 font-semibold text-amber-400">⭐ 우선순위 기능 추가</p>
-            <p>각 층의 작업 우선순위를 설정하면, '긴급'한 층에 먼저 인원을 지원하도록 제안합니다.</p>
-			<p class="mt-2 font-semibold text-amber-400">💙 집품 효율 계산기 제작 관리자</p>
+            <p class="mt-2 font-semibold text-red-400">🚨 긴급 백로그 기능 추가</p>
+            <p>'긴급 백로그'를 입력하면, 해당 물량 처리를 최우선으로 고려하여 인원을 제안합니다.</p>
+			<p class="mt-2 font-semibold text-red-400">💙 집품 효율 계산기 제작 관리자</p>
             <p>Leif / Alan / Bennett</p>
         </div>
     </aside>
@@ -107,17 +107,11 @@
                 <div class="calculator-card bg-gray-800 rounded-lg flex flex-col overflow-hidden border-t-4 border-yellow-400">
                     <div class="p-5 space-y-4">
                         <h2 class="text-xl font-bold text-yellow-400">🏢 6층 (6.1 + 6.3)</h2>
-                        <div class="relative">
-                            <label class="text-sm font-medium text-gray-400">⭐ 작업 우선순위</label>
-                            <select id="priority-6f" class="calc-input w-full bg-gray-700 rounded p-2 mt-1 appearance-none">
-                                <option value="긴급">🚨긴급</option>
-                                <option value="보통" selected>보통</option>
-                                <option value="여유">👍여유</option>
-                            </select>
-                        </div>
+                        <div class="relative"><label class="text-sm font-medium text-gray-400">⭐ 작업 우선순위</label><select id="priority-6f" class="calc-input w-full bg-gray-700 rounded p-2 mt-1 appearance-none"><option value="긴급">긴급</option><option value="보통" selected>보통</option><option value="여유">여유</option></select></div>
                         <div class="space-y-3">
                             <div class="relative"><label class="text-sm font-medium text-gray-400">현재 인원 (명)</label><input type="number" id="staff-6f" class="calc-input w-full bg-gray-700 rounded p-2 mt-1" placeholder="0"></div>
-                            <div class="relative"><label class="text-sm font-medium text-gray-400">집품 백로그 (유닛 수)</label><input type="number" id="backlog-6f" class="calc-input w-full bg-gray-700 rounded p-2 mt-1" placeholder="0"></div>
+                            <div class="relative"><label class="text-sm font-medium text-gray-400">전체 백로그 (유닛 수)</label><input type="number" id="backlog-6f" class="calc-input w-full bg-gray-700 rounded p-2 mt-1" placeholder="0"></div>
+                            <div class="relative"><label class="text-sm font-medium text-red-400">🚨 긴급 백로그 (유닛 수)</label><input type="number" id="urgent-backlog-6f" class="calc-input w-full bg-red-900/50 border border-red-700 rounded p-2 mt-1" placeholder="0"></div>
                         </div>
                         <div class="bg-gray-700/60 p-3 rounded-md space-y-2">
                             <div class="flex justify-between items-center"><label class="text-sm font-semibold text-cyan-400">진행 상황</label><button id="apply-progress-6f" class="apply-progress-btn text-xs bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-1 px-2 rounded">🔄 반영</button></div>
@@ -130,17 +124,18 @@
                     </div>
                     <div class="border-t border-gray-700 mt-auto p-5 space-y-2 text-sm bg-gray-800/50">
                         <p class="flex justify-between"><span>📈 예상 완료 시간:</span> <span id="result-completion-time-6f" class="font-bold text-lg text-white">-.--</span></p>
-                        <p class="flex justify-between"><span>🎯 목표 달성 UPH:</span> <span id="result-required-uph-6f" class="font-bold text-lg text-white">-.--</span></p>
+                        <p class="flex justify-between"><span>🚨 긴급 건 완료:</span> <span id="result-urgent-completion-time-6f" class="font-bold text-lg text-white">-.--</span></p>
                         <p class="flex justify-between"><span>🧑‍🤝‍🧑 필요/잉여 인원:</span> <span id="result-staff-diff-6f" class="font-bold text-lg text-white">-.--</span></p>
                     </div>
                 </div>
                 <div class="calculator-card bg-gray-800 rounded-lg flex flex-col overflow-hidden border-t-4 border-green-400">
                      <div class="p-5 space-y-4">
                         <h2 class="text-xl font-bold text-green-400">🏢 7.2층</h2>
-                        <div class="relative"><label class="text-sm font-medium text-gray-400">⭐ 작업 우선순위</label><select id="priority-72f" class="calc-input w-full bg-gray-700 rounded p-2 mt-1 appearance-none"><option value="긴급">🚨긴급</option><option value="보통" selected>보통</option><option value="여유">👍여유</option></select></div>
+                        <div class="relative"><label class="text-sm font-medium text-gray-400">⭐ 작업 우선순위</label><select id="priority-72f" class="calc-input w-full bg-gray-700 rounded p-2 mt-1 appearance-none"><option value="긴급">긴급</option><option value="보통" selected>보통</option><option value="여유">여유</option></select></div>
                         <div class="space-y-3">
                             <div class="relative"><label class="text-sm font-medium text-gray-400">현재 인원 (명)</label><input type="number" id="staff-72f" class="calc-input w-full bg-gray-700 rounded p-2 mt-1" placeholder="0"></div>
-                            <div class="relative"><label class="text-sm font-medium text-gray-400">집품 백로그 (유닛 수)</label><input type="number" id="backlog-72f" class="calc-input w-full bg-gray-700 rounded p-2 mt-1" placeholder="0"></div>
+                            <div class="relative"><label class="text-sm font-medium text-gray-400">전체 백로그 (유닛 수)</label><input type="number" id="backlog-72f" class="calc-input w-full bg-gray-700 rounded p-2 mt-1" placeholder="0"></div>
+                            <div class="relative"><label class="text-sm font-medium text-red-400">🚨 긴급 백로그 (유닛 수)</label><input type="number" id="urgent-backlog-72f" class="calc-input w-full bg-red-900/50 border border-red-700 rounded p-2 mt-1" placeholder="0"></div>
                         </div>
                         <div class="bg-gray-700/60 p-3 rounded-md space-y-2">
                              <div class="flex justify-between items-center"><label class="text-sm font-semibold text-cyan-400">진행 상황</label><button id="apply-progress-72f" class="apply-progress-btn text-xs bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-1 px-2 rounded">🔄 반영</button></div>
@@ -153,17 +148,18 @@
                     </div>
                     <div class="border-t border-gray-700 mt-auto p-5 space-y-2 text-sm bg-gray-800/50">
                         <p class="flex justify-between"><span>📈 예상 완료 시간:</span> <span id="result-completion-time-72f" class="font-bold text-lg text-white">-.--</span></p>
-                        <p class="flex justify-between"><span>🎯 목표 달성 UPH:</span> <span id="result-required-uph-72f" class="font-bold text-lg text-white">-.--</span></p>
+                        <p class="flex justify-between"><span>🚨 긴급 건 완료:</span> <span id="result-urgent-completion-time-72f" class="font-bold text-lg text-white">-.--</span></p>
                         <p class="flex justify-between"><span>🧑‍🤝‍🧑 필요/잉여 인원:</span> <span id="result-staff-diff-72f" class="font-bold text-lg text-white">-.--</span></p>
                     </div>
                 </div>
                 <div class="calculator-card bg-gray-800 rounded-lg flex flex-col overflow-hidden border-t-4 border-blue-400">
                     <div class="p-5 space-y-4">
                         <h2 class="text-xl font-bold text-blue-400">🏢 7.3층</h2>
-                        <div class="relative"><label class="text-sm font-medium text-gray-400">⭐ 작업 우선순위</label><select id="priority-73f" class="calc-input w-full bg-gray-700 rounded p-2 mt-1 appearance-none"><option value="긴급">🚨긴급</option><option value="보통" selected>보통</option><option value="여유">👍여유</option></select></div>
+                        <div class="relative"><label class="text-sm font-medium text-gray-400">⭐ 작업 우선순위</label><select id="priority-73f" class="calc-input w-full bg-gray-700 rounded p-2 mt-1 appearance-none"><option value="긴급">긴급</option><option value="보통" selected>보통</option><option value="여유">여유</option></select></div>
                         <div class="space-y-3">
                             <div class="relative"><label class="text-sm font-medium text-gray-400">현재 인원 (명)</label><input type="number" id="staff-73f" class="calc-input w-full bg-gray-700 rounded p-2 mt-1" placeholder="0"></div>
-                            <div class="relative"><label class="text-sm font-medium text-gray-400">집품 백로그 (유닛 수)</label><input type="number" id="backlog-73f" class="calc-input w-full bg-gray-700 rounded p-2 mt-1" placeholder="0"></div>
+                            <div class="relative"><label class="text-sm font-medium text-gray-400">전체 백로그 (유닛 수)</label><input type="number" id="backlog-73f" class="calc-input w-full bg-gray-700 rounded p-2 mt-1" placeholder="0"></div>
+                            <div class="relative"><label class="text-sm font-medium text-red-400">🚨 긴급 백로그 (유닛 수)</label><input type="number" id="urgent-backlog-73f" class="calc-input w-full bg-red-900/50 border border-red-700 rounded p-2 mt-1" placeholder="0"></div>
                         </div>
                         <div class="bg-gray-700/60 p-3 rounded-md space-y-2">
                              <div class="flex justify-between items-center"><label class="text-sm font-semibold text-cyan-400">진행 상황</label><button id="apply-progress-73f" class="apply-progress-btn text-xs bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-1 px-2 rounded">🔄 반영</button></div>
@@ -176,7 +172,7 @@
                     </div>
                     <div class="border-t border-gray-700 mt-auto p-5 space-y-2 text-sm bg-gray-800/50">
                         <p class="flex justify-between"><span>📈 예상 완료 시간:</span> <span id="result-completion-time-73f" class="font-bold text-lg text-white">-.--</span></p>
-                        <p class="flex justify-between"><span>🎯 목표 달성 UPH:</span> <span id="result-required-uph-73f" class="font-bold text-lg text-white">-.--</span></p>
+                        <p class="flex justify-between"><span>🚨 긴급 건 완료:</span> <span id="result-urgent-completion-time-73f" class="font-bold text-lg text-white">-.--</span></p>
                         <p class="flex justify-between"><span>🧑‍🤝‍🧑 필요/잉여 인원:</span> <span id="result-staff-diff-73f" class="font-bold text-lg text-white">-.--</span></p>
                     </div>
                 </div>
@@ -185,7 +181,7 @@
                     <div class="space-y-3">
                         <div class="grid grid-cols-2 gap-x-4"><span class="text-gray-400">👨‍👩‍👧‍👦 총 인원:</span><span id="total-staff" class="font-bold text-white text-lg text-right">0 명</span></div>
                         <div class="grid grid-cols-2 gap-x-4"><span class="text-gray-400">📦 총 백로그:</span><span id="total-backlog" class="font-bold text-white text-lg text-right">0 유닛</span></div>
-                        <div class="grid grid-cols-2 gap-x-4"><span class="text-gray-400">⚡ 총 시간당 처리량:</span><span id="total-throughput" class="font-bold text-white text-lg text-right">0 유닛/시간</span></div>
+                        <div class="grid grid-cols-2 gap-x-4"><span class="text-gray-400 text-red-400">🚨 총 긴급 백로그:</span><span id="total-urgent-backlog" class="font-bold text-white text-lg text-right">0 유닛</span></div>
                         <div class="border-t border-gray-700 pt-3"></div>
                         <div class="grid grid-cols-2 gap-x-4"><span class="text-gray-400">📈 전체 예상 완료:</span><span id="total-completion-time" class="font-bold text-white text-lg text-right">-.--</span></div>
                         <div class="grid grid-cols-2 gap-x-4"><span class="text-gray-400">🧑‍🤝‍🧑 전체 필요/잉여:</span><span id="total-staff-diff" class="font-bold text-white text-lg text-right">-.--</span></div>
@@ -201,19 +197,16 @@
 </div>
 
 <script>
-// ✨ YOUR FIREBASE CONFIG: 1단계에서 복사한 코드를 여기에 붙여넣으세요!
 const firebaseConfig = {
   apiKey: "AIzaSyC1iUAOPtVFy2XcxU7x8qjUwZjmB8VOdpc",
   authDomain: "logistics-calculator-fb355.firebaseapp.com",
   databaseURL: "https://logistics-calculator-fb355-default-rtdb.firebaseio.com",
   projectId: "logistics-calculator-fb355",
-  storageBucket: "logistics-calculator-fb355.firebasestorage.app",
+  storageBucket: "logistics-calculator-fb355.appspot.com",
   messagingSenderId: "14994462026",
   appId: "1:14994462026:web:4f9507241c1cf29d569db3",
   measurementId: "G-TF51GP65HR"
 };
-
-// --- 이하 코드는 수정할 필요 없습니다. ---
 
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
@@ -274,7 +267,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const path = input.id.replace(/-/g, '/');
             const value = getObjectValueByPath(data, path);
             if (value !== undefined && document.activeElement !== input) {
-                 input.value = value || (input.type === 'number' ? '' : '보통');
+                 input.value = value || (input.tagName === 'SELECT' ? '보통' : '');
             }
         });
     }
@@ -313,11 +306,14 @@ document.addEventListener('DOMContentLoaded', () => {
             const floorData = { ...floor, ...stat };
 
             if (stat.staffDiff > 0) surplusFloors.push({ ...floorData, surplus: stat.staffDiff });
-            else if (stat.staffDiff < 0) deficitFloors.push({ ...floorData, deficit: Math.abs(stat.staffDiff) });
+            else if (stat.staffDiff < 0) deficitFloors.push({ ...floorData, deficit: Math.abs(stat.staffDiff), urgentDeficit: Math.abs(stat.urgentStaffDiff) });
         });
 
         surplusFloors.sort((a, b) => b.surplus - a.surplus);
         deficitFloors.sort((a, b) => {
+            if (a.urgentDeficit > 0 || b.urgentDeficit > 0) {
+                if (a.urgentDeficit !== b.urgentDeficit) return b.urgentDeficit - a.urgentDeficit;
+            }
             const priorityA = priorityOrder[a.priority] || 2;
             const priorityB = priorityOrder[b.priority] || 2;
             if (priorityA !== priorityB) return priorityA - priorityB;
@@ -371,13 +367,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const deadlineMinutes = parseFloat(document.getElementById('deadline-minutes').value) || 0;
         const deadline = deadlineHours + (deadlineMinutes / 60);
 
-        let total = { staff: 0, backlog: 0, throughput: 0 };
+        let total = { staff: 0, backlog: 0, urgentBacklog: 0, throughput: 0 };
         floorStats = {};
 
         floors.forEach(floor => {
             const floorId = floor.id;
             const staff = parseFloat(document.getElementById(`staff-${floorId}`).value) || 0;
             const backlog = parseFloat(document.getElementById(`backlog-${floorId}`).value) || 0;
+            const urgentBacklog = parseFloat(document.getElementById(`urgent-backlog-${floorId}`).value) || 0;
             const uphInput = document.getElementById(`uph-${floorId}`);
             const progressMinutes = parseFloat(document.getElementById(`progress-minutes-${floorId}`).value) || 0;
             const progressUnits = parseFloat(document.getElementById(`progress-units-${floorId}`).value) || 0;
@@ -391,37 +388,53 @@ document.addEventListener('DOMContentLoaded', () => {
             const uph = parseFloat(uphInput.value) || 0;
             const floorThroughput = staff * uph;
             const completionTime = (floorThroughput > 0) ? (backlog / floorThroughput) : 0;
+            const urgentCompletionTime = (floorThroughput > 0) ? (urgentBacklog / floorThroughput) : 0;
             const completionTimeEl = document.getElementById(`result-completion-time-${floorId}`);
+            const urgentCompletionTimeEl = document.getElementById(`result-urgent-completion-time-${floorId}`);
             
             completionTimeEl.classList.remove('text-red-500');
             completionTimeEl.textContent = formatTime(completionTime);
+            urgentCompletionTimeEl.classList.remove('text-red-500');
+            urgentCompletionTimeEl.textContent = formatTime(urgentCompletionTime);
 
             if (deadline > 0 && completionTime > deadline) {
                 completionTimeEl.classList.add('text-red-500');
                 completionTimeEl.innerHTML = `🚨 ${completionTimeEl.textContent}`;
             }
+             if (deadline > 0 && urgentCompletionTime > deadline) {
+                urgentCompletionTimeEl.classList.add('text-red-500');
+                urgentCompletionTimeEl.innerHTML = `🚨 ${urgentCompletionTimeEl.textContent}`;
+            }
 
             let staffDiff = 0;
-            if (deadline > 0 && backlog > 0) {
-                const requiredStaff = (uph > 0) ? Math.ceil((backlog / deadline) / uph) : 0;
-                staffDiff = staff - requiredStaff;
-                document.getElementById(`result-staff-diff-${floorId}`).innerHTML = staffDiff >= 0 ? `<span class="text-green-400">+${staffDiff}명 (잉여)</span>` : `<span class="text-red-400">${staffDiff}명 (부족)</span>`;
+            let urgentStaffDiff = 0;
+            if (deadline > 0) {
+                if (backlog > 0) {
+                    const requiredStaff = (uph > 0) ? Math.ceil((backlog / deadline) / uph) : 0;
+                    staffDiff = staff - requiredStaff;
+                    document.getElementById(`result-staff-diff-${floorId}`).innerHTML = staffDiff >= 0 ? `<span class="text-green-400">+${staffDiff}명 (잉여)</span>` : `<span class="text-red-400">${staffDiff}명 (부족)</span>`;
+                } else {
+                    document.getElementById(`result-staff-diff-${floorId}`).textContent = "-.--";
+                }
+                if (urgentBacklog > 0) {
+                    const urgentRequiredStaff = (uph > 0) ? Math.ceil((urgentBacklog / deadline) / uph) : 0;
+                    urgentStaffDiff = staff - urgentRequiredStaff;
+                }
             } else {
-                 document.getElementById(`result-staff-diff-${floorId}`).textContent = "-.--";
+                document.getElementById(`result-staff-diff-${floorId}`).textContent = "-.--";
             }
             
-            document.getElementById(`result-required-uph-${floorId}`).textContent = (deadline > 0 && staff > 0) ? `${(backlog / (staff * deadline)).toFixed(1)} UPH` : "-.--";
-            
-            floorStats[floorId] = { staff, backlog, uph, staffDiff, completionTime, priority };
+            floorStats[floorId] = { staff, backlog, uph, staffDiff, urgentStaffDiff, completionTime, priority };
 
             total.staff += staff;
             total.backlog += backlog;
+            total.urgentBacklog += urgentBacklog;
             total.throughput += floorThroughput;
         });
 
         document.getElementById('total-staff').textContent = `${total.staff} 명`;
         document.getElementById('total-backlog').textContent = `${total.backlog.toLocaleString()} 유닛`;
-        document.getElementById('total-throughput').textContent = `${total.throughput.toLocaleString()} 유닛/시간`;
+        document.getElementById('total-urgent-backlog').textContent = `${total.urgentBacklog.toLocaleString()} 유닛`;
         
         const totalCompletionTime = (total.throughput > 0) ? (total.backlog / total.throughput) : 0;
         const totalCompletionTimeEl = document.getElementById('total-completion-time');
@@ -452,14 +465,16 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.apply-progress-btn').forEach(button => {
         button.addEventListener('click', () => {
             const floorId = button.id.replace('apply-progress-', '');
-            const paths = { backlog: `backlog/${floorId}`, progressUnits: `progress-units/${floorId}`, progressMinutes: `progress-minutes/${floorId}` };
+            const paths = { backlog: `backlog/${floorId}`, urgentBacklog: `urgent-backlog/${floorId}`, progressUnits: `progress-units/${floorId}`, progressMinutes: `progress-minutes/${floorId}` };
             db.ref().once('value', (snapshot) => {
                 const data = snapshot.val();
                 const currentBacklog = getObjectValueByPath(data, paths.backlog) || 0;
+                const currentUrgentBacklog = getObjectValueByPath(data, paths.urgentBacklog) || 0;
                 const processedUnits = getObjectValueByPath(data, paths.progressUnits) || 0;
                 if (processedUnits > 0) {
                     let updates = {};
                     updates[paths.backlog] = Math.max(0, currentBacklog - processedUnits);
+                    updates[paths.urgentBacklog] = Math.max(0, currentUrgentBacklog - processedUnits);
                     updates[paths.progressUnits] = null;
                     updates[paths.progressMinutes] = null;
                     db.ref().update(updates);
